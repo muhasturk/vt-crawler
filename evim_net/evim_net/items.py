@@ -11,7 +11,6 @@ class EvimNetItem(scrapy.Item):
     priceOld = Field()
     priceNew = Field()
     brand = Field()
-    sizes = Field()
     images = Field()
     description = Field()
 

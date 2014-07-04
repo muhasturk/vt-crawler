@@ -1,12 +1,10 @@
 # -*- coding: utf-8 -*-
 __author__ = 'mh'
 
-import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-
 from evim_net.items import EvimNetItem
-
+import re
 
 class EvimSpider(CrawlSpider):
     name = 'evim'
@@ -14,27 +12,34 @@ class EvimSpider(CrawlSpider):
     start_urls = ['http://www.evim.net/']
 
     rules = (
-        Rule(LinkExtractor(allow='/.*_p(\d*)/'), callback='parse_item', follow=True),
+        Rule(LinkExtractor(allow='.*_p\d+.*'), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
         i = EvimNetItem()
-        i['id'] = response.url().re('/_p(\d)+/')
-        i['url'] = response.url()
+        i['url'] = response.url
+        i['id'] = re.compile("_p(\d+)").findall(response.url)
 
         breadcrumbs = response.xpath('//div[contains(@itemtype,"Breadcrumb")]')
         category = ''
         for ct in breadcrumbs:
-            category += " > " + ct.xpath('.//span/text()').extract()
+            a = str(ct.xpath('.//span/text()').extract())
+            b = " > "
+            category += a+b
         i['category'] = category
 
         i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()
 
-        # i['priceOld'] = response.xpath('//div[contains(@class = "priceDetail")]')
+        a = response.xpath('//div[@class="oldPrice fl"]/text()').extract()
+        b = response.xpath('//div[@class="oldPrice fl"]//span/text()').extract()
+        i['priceOld'] = a+b
 
-        #i['domain_id'] = response.xpath('//input[@id="sid"]/@value').extract()
-        #i['name'] = response.xpath('//div[@id="name"]').extract()
-        #i['description'] = response.xpath('//div[@id="description"]').extract()
+        i['priceNew'] = response.xpath('//div[@class="price fl"]/text()').extract()+response.xpath('//div[@class="price fl"]//span/text()').extract()
 
-        print(i)
+        i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()
+
+        i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()
+
+        i['description'] = response.xpath('//div[@class="urunDetayOzelliktxt"]/text()').extract()
+
         return i
