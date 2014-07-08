@@ -20,7 +20,7 @@ class EvimNetPipeline(object):
         # file = open('%s_products.xml' % spider.name, 'w+b')
         file = open('/home/mh/PycharmProjects/vitringez/evim_net/sonuc.xml' ,'w+b')
         self.files[spider] = file
-        self.exporter = XmlItemExporter(file)
+        self.exporter = XmlItemExporter(file,root_element="products", item_element="product")
         self.exporter.start_exporting()
 
     def spider_closed(self, spider):
