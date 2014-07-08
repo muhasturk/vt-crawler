@@ -1,9 +1,10 @@
 # -*- coding: utf-8 -*-
 
 import scrapy
+Item = scrapy.Item
 Field = scrapy.Field
 
-class EvimNetItem(scrapy.Item):
+class EvimNetItem(Item):
     id = Field()
     url = Field()
     category = Field()

@@ -23,15 +23,15 @@ class EvimSpider(CrawlSpider):
         breadcrumbs = response.xpath('//div[contains(@itemtype,"Breadcrumb")]')
         category = ''
         for ct in breadcrumbs:
-            a = str(ct.xpath('.//span/text()').extract())
-            b = " > "
-            category += a+b
+            category += str(
+                ct.xpath('.//span/text()').extract()[0]
+            ) + " > "
         i['category'] = category
 
         i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()
 
-        a = response.xpath('//div[@class="oldPrice fl"]/text()').extract()
-        b = response.xpath('//div[@class="oldPrice fl"]//span/text()').extract()
+        a = str(response.xpath('//div[@class="oldPrice fl"]/text()').extract()[0])
+        b = str(response.xpath('//div[@class="oldPrice fl"]//span/text()').extract()[0])
         i['priceOld'] = a+b
 
         i['priceNew'] = response.xpath('//div[@class="price fl"]/text()').extract()+response.xpath('//div[@class="price fl"]//span/text()').extract()
