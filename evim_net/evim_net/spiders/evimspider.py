@@ -5,27 +5,40 @@ from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from evim_net.items import EvimNetItem
 import re
+import scrapy
 
 
 class EvimSpider(CrawlSpider):
-    name = 'evim'
+    name = 'evimspider'
     allowed_domains = ['evim.net']
     start_urls = ['http://www.evim.net/']
 
     rules = (
-        Rule(LinkExtractor(allow='.*_p\d+.*'), callback='parse_item', follow=True),
+        Rule(
+            LinkExtractor( allow="(.*_p\d+.*)", ),
+            callback='parse_item',
+            follow=True),
     )
 
     def parse_item(self, response):
         i = EvimNetItem()
         i['url'] = response.url
-        i['id'] = re.compile("_p(\d+)").findall(response.url)[0]
+
+        try:
+            i['id'] = re.compile('_p(\d+)').findall(response.url)[0]
+
+        except Exception as e:
+            self.log("hatalı ürün url:"+response.url)
+
+        # i['id'] = re.compile('_p(\d+)').findall(response.url)[0],
+
 
         breadcrumbs = response.xpath('//div[contains(@itemtype,"Breadcrumb")]')
         category = ''
         for ct in breadcrumbs:
             category += ct.xpath('.//span/text()').extract()[0] + " > "
         i['category'] = category
+
 
         i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
 
