@@ -15,7 +15,10 @@ class EvimSpider(CrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor( allow="(.*_p\d+.*)", ),
+            # LinkExtractor( allow="(.*_p\d+.*)", ),
+            LinkExtractor(
+                allow=("(_p\d+)",)
+            ),
             callback='parse_item',
             follow=True),
     )
@@ -31,7 +34,6 @@ class EvimSpider(CrawlSpider):
             self.log("hatalı ürün url:"+response.url)
 
         # i['id'] = re.compile('_p(\d+)').findall(response.url)[0],
-
 
         breadcrumbs = response.xpath('//div[contains(@itemtype,"Breadcrumb")]')
         category = ''
@@ -53,7 +55,9 @@ class EvimSpider(CrawlSpider):
 
         if response.xpath('//span[@class="productBrand"]/a/text()'):
             i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
-        i['brand'] = ''
+
+        else:
+            i['brand'] = ''
 
         if response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href'):
             i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()[0]

@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
-import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-
 from markafoni_com.items import MarkafoniComItem
 import re
-
 
 class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
@@ -14,7 +11,10 @@ class MarkafonispiderSpider(CrawlSpider):
 
     rules = (
         Rule(
-            LinkExtractor(allow=('.*/product/\d+/$')),
+            LinkExtractor(
+                allow=('/product/\d+/'),
+                deny=('/product/\d+/\.*')
+            ),
             callback='parse_item',
             follow=True),
     )
@@ -32,7 +32,6 @@ class MarkafonispiderSpider(CrawlSpider):
             description = ''
             for li in response.xpath("//div[@class='lh1-2 dgray']//li"):
                 description += li.xpath("./text()").extract()
-
             i['description'] = description
 
             priceOld = ''
@@ -50,7 +49,7 @@ class MarkafonispiderSpider(CrawlSpider):
 
 
         except Exception as e:
-            self.log("hatanin oldugu url: "+response.url)
+            self.log("hatanin oldugu url: "+response.url+"\n hata mesajı: "+e.message)
 
         finally:
             return i
