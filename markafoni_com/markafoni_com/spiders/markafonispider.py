@@ -13,10 +13,9 @@ class MarkafonispiderSpider(CrawlSpider):
     start_urls = ['http://www.markafoni.com/']
 
     rules = (
-        Rule(
-            LinkExtractor(allow=('.*/product/\d+/$')),
-            callback='parse_item',
-            follow=True),
+        Rule(LinkExtractor(allow=('.com/(.*)/$'))),
+        Rule(LinkExtractor(allow=('product/(.*)/(.*)/$'))),
+        Rule(LinkExtractor(allow=('/product/(\d+)/$')), callback='parse_item'),
     )
 
     def parse_item(self, response):
