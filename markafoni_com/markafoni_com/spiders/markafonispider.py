@@ -33,10 +33,10 @@ class MarkafonispiderSpider(CrawlSpider):
 
         i['description'] = description
 
-        priceOld = ''
+        priceNew = ''
         for price in response.xpath("//div[contains(@class,'buying_price')]"):
-            priceOld += price.xpath("./text()").extract()[0]
-        i['priceOld'] = priceOld
+            priceNew += price.xpath("./text()").extract()[0]
+        i['priceNew'] = priceNew
 
         i['priceOld'] = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
 
