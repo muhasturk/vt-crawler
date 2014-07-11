@@ -30,20 +30,22 @@ class MarkafonispiderSpider(CrawlSpider):
         description = ''
         for li in response.xpath("//div[@class='lh1-2 dgray']//li/text()").extract():
             description += li
-
         i['description'] = description
 
         priceNew = ''
-        for price in response.xpath("//div[contains(@class,'buying_price')]"):
-            priceNew += price.xpath("./text()").extract()[0]
+        for price in response.xpath("//div[contains(@class,'buying_price')]/text()").extract():
+            priceNew += price
         i['priceNew'] = priceNew
 
         i['priceOld'] = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
 
         i['images'] = response.xpath("//meta[@itemprop='image']/@content").extract()[0]
 
-        for label in response.xpath("//div[@id='size_select']//label"):
-            i['sizes'] = label.xpath("./text()").extract()[0]
+        if response.xpath("//div[@id='size_select']//label"):
+            for label in response.xpath("//div[@id='size_select']//label/text()").extract():
+                i['sizes'] = label
+        else:
+            i['size'] = ''
 
         return i
 
