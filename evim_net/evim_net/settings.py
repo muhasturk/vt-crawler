@@ -17,7 +17,7 @@ ITEM_PIPELINES = {
     'evim_net.pipelines.EvimNetPipeline': 300,
 }
 
-LOG_FILE = "/tmp/scrapy.log"
+LOG_FILE = "/tmp/evim.log"
 
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'evim_net (+http://www.yourdomain.com)'
