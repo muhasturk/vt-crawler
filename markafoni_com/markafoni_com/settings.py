@@ -13,5 +13,11 @@ BOT_NAME = 'markafoni_com'
 SPIDER_MODULES = ['markafoni_com.spiders']
 NEWSPIDER_MODULE = 'markafoni_com.spiders'
 
+ITEM_PIPELINES = {
+    'markafoni_com.pipelines.MarkafoniComPipeline': 300,
+}
+
+LOG_FILE = "/tmp/markafoni.log"
+
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'markafoni_com (+http://www.yourdomain.com)'
