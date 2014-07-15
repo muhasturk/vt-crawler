@@ -5,7 +5,7 @@ __author__ = 'muhasturk'
 from scrapy import signals
 from scrapy.contrib.exporter import XmlItemExporter
 
-class EvimNetPipeline(object):
+class CrawlingPipeline(object):
     def __init__(self):
         self.files = {}
 
@@ -18,7 +18,7 @@ class EvimNetPipeline(object):
 
     def spider_opened(self, spider):
         # file = open('%s_products.xml' % spider.name, 'w+b')
-        file = open('/home/mh/PycharmProjects/vitringez/evim_net/sonuc.xml' ,'w+b')
+        file = open('/home/mh/PycharmProjects/vitringez/crawling/%s_sonuc.xml' %spider.name ,'w+b')
         self.files[spider] = file
         self.exporter = XmlItemExporter(file,root_element="products", item_element="product")
         self.exporter.start_exporting()
@@ -31,4 +31,3 @@ class EvimNetPipeline(object):
     def process_item(self, item, spider):
         self.exporter.export_item(item)
         return item
-
