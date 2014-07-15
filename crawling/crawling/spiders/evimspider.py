@@ -3,10 +3,8 @@ __author__ = 'mh'
 
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from evim_net.items import EvimNetItem
+from crawling.items import CrawlingItem
 import re
-import scrapy
-
 
 class EvimSpider(CrawlSpider):
     name = 'evimspider'
@@ -15,16 +13,27 @@ class EvimSpider(CrawlSpider):
 
     rules = (
         Rule(
-            # LinkExtractor( allow="(.*_p\d+.*)", ),
-            LinkExtractor(
-                allow=("(_p\d+)",)
-            ),
+            LinkExtractor(allow=('.net/([\w-]+)_c(\d+)$'))
+        ),
+        Rule(
+            LinkExtractor(allow=('.net/([\w-]+)_c(\d+)(\?orderBy=staff_pick)$'))
+        ),
+        Rule(
+            LinkExtractor(allow=('.net/([\w-]+)_c(\d+)(\?page=(\d+))?$'))
+        ),
+        Rule(
+            LinkExtractor( allow=('.net/([\w-]+)/([\w-]+)_p(\d+)(\?from=subcat)?$')),
             callback='parse_item',
-            follow=True),
+        ),
+
+        # Rule(
+        #     LinkExtractor( allow=('.*/(\w+)/(\w+)_p(\d+)\?from=subcat$')),
+        #     callback='parse_item',
+        # ),
     )
 
     def parse_item(self, response):
-        i = EvimNetItem()
+        i = CrawlingItem()
         i['url'] = response.url
 
         try:
@@ -55,7 +64,6 @@ class EvimSpider(CrawlSpider):
 
         if response.xpath('//span[@class="productBrand"]/a/text()'):
             i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
-
         else:
             i['brand'] = ''
 
