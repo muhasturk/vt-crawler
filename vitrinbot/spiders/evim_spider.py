@@ -3,9 +3,10 @@ __author__ = 'mh'
 
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from crawling.items import CrawlingItem
+from vitrinbot.items import CrawlingItem
+
+
 import re
-import scrapy
 
 
 class EvimSpider(CrawlSpider):
@@ -35,7 +36,7 @@ class EvimSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        i = CrawlingItem"()
+        i = CrawlingItem()
         i['url'] = response.url
 
         try:

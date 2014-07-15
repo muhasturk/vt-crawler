@@ -8,13 +8,17 @@
 #     http://doc.scrapy.org/en/latest/topics/settings.html
 #
 
-BOT_NAME = 'crawling'
+BOT_NAME = 'vitrinbot'
 
-SPIDER_MODULES = ['crawling.spiders']
-NEWSPIDER_MODULE = 'crawling.spiders'
+SPIDER_MODULES = ['vitrinbot.spiders']
+NEWSPIDER_MODULE = 'vitrinbot.spiders'
 
 ITEM_PIPELINES = {
-    'crawling.pipelines.CrawlingPipeline': 300,
+    'vitrinbot.pipelines.CrawlingPipeline': 300,
 }
 
-LOG_FILE = "/tmp/crawling.log"
+LOG_FILE = "/tmp/vitrinbot.log"
+
+XML_DUMP_DIR = '/tmp'
+
+# @todo xml dump dizini konfigure edilebilir olmalı

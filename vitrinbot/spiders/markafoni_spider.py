@@ -2,7 +2,7 @@
 import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from crawling.items import CrawlingItem
+from vitrinbot.items import CrawlingItem
 import re
 
 
@@ -10,6 +10,8 @@ class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
     allowed_domains = ['markafoni.com']
     start_urls = ['https://www.markafoni.com/']
+    # @todo dosya adı pipelineda kullanılacak
+    xml_filename = 'markafoni-%d.xml'
 
     rules = (
         Rule(LinkExtractor(allow=('.com/(\w+)/$'))),

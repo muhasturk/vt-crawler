@@ -5,7 +5,7 @@ from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.selector import Selector
 
-from crawling.items import CrawlingItem
+from vitrinbot.items import CrawlingItem
 
 
 class KozmopolispiderSpider(CrawlSpider):
