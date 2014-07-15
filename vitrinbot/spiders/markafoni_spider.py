@@ -2,7 +2,7 @@
 import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from crawling.items import CrawlingItem
+from vitrinbot.items import ProductItem
 import re
 
 
@@ -10,6 +10,7 @@ class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
     allowed_domains = ['markafoni.com']
     start_urls = ['https://www.markafoni.com/']
+    # @todo dosya adı pipelineda kullanılacak
 
     rules = (
         Rule(LinkExtractor(allow=('.com/(\w+)/$'))),
@@ -19,7 +20,7 @@ class MarkafonispiderSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        i = CrawlingItem()
+        i = ProductItem()
         i['id'] = re.compile('product/(\d+)').findall(response.url)[0]
         i['url'] = response.url
         i['title'] = response.xpath('//p[@class="product-head-toptitle-first lh20"]/text()').extract()[0]

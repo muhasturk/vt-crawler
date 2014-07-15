@@ -4,13 +4,15 @@ from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.selector import Selector
 
-from crawling.items import CrawlingItem
+from vitrinbot.items import ProductItem
 
 
 class KozmopolispiderSpider(CrawlSpider):
     name = 'kozmopolispider'
     allowed_domains = ['kozmopoli.com']
     start_urls = ['http://www.kozmopoli.com/']
+
+    xml_filename = 'kozmopoli-%d.xml'
 
     rules = (
         Rule(
@@ -26,7 +28,7 @@ class KozmopolispiderSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        i = CrawlingItem()
+        i = ProductItem()
         hxs = Selector(response)
 
         i['id'] = hxs.xpath('//div[@class="labeled pr-code"]/text()').extract()[0]
@@ -43,11 +45,11 @@ class KozmopolispiderSpider(CrawlSpider):
         i['category'] = category
 
         try:
-            i['priceNew'] = hxs.xpath('//span[@id="indirimli_satis_fiyati"]/text()').extract()[0]
+            i['special_price'] = hxs.xpath('//span[@id="indirimli_satis_fiyati"]/text()').extract()[0]
         except:
-            i['priceNew'] = ''
+            i['special_price'] = ''
 
-        i['priceOld'] = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
+        i['price'] = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
 
         try:
             description = ''
@@ -60,6 +62,10 @@ class KozmopolispiderSpider(CrawlSpider):
 
         for img in hxs.xpath("//div[@class='zoom']//img/@src").extract():
             i['images'] = img
+
+        i['colors'] = ''
+        i['expire_timestamp'] = ''
+        i['currency'] = 'TL'
 
 
         return i

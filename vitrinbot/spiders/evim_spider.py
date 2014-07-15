@@ -3,8 +3,10 @@ __author__ = 'mh'
 
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from crawling.items import CrawlingItem
+from vitrinbot.items import ProductItem
+
 import re
+
 
 class EvimSpider(CrawlSpider):
     name = 'evimspider'
@@ -25,15 +27,10 @@ class EvimSpider(CrawlSpider):
             LinkExtractor( allow=('.net/([\w-]+)/([\w-]+)_p(\d+)(\?from=subcat)?$')),
             callback='parse_item',
         ),
-
-        # Rule(
-        #     LinkExtractor( allow=('.*/(\w+)/(\w+)_p(\d+)\?from=subcat$')),
-        #     callback='parse_item',
-        # ),
     )
 
     def parse_item(self, response):
-        i = CrawlingItem()
+        i = ProductItem()
         i['url'] = response.url
 
         try:
