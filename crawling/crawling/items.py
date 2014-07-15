@@ -4,7 +4,7 @@ import scrapy
 Item = scrapy.Item
 Field = scrapy.Field
 
-class EvimNetItem(Item):
+class CrawlingItem(Item):
     id = Field()
     url = Field()
     category = Field()
@@ -14,4 +14,3 @@ class EvimNetItem(Item):
     brand = Field()
     images = Field()
     description = Field()
-

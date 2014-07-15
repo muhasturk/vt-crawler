@@ -2,7 +2,7 @@
 import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from markafoni_com.items import MarkafoniComItem
+from crawling.items import CrawlingItem
 import re
 
 
@@ -19,7 +19,7 @@ class MarkafonispiderSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        i = MarkafoniComItem()
+        i = CrawlingItem()
         i['id'] = re.compile('product/(\d+)').findall(response.url)[0]
         i['url'] = response.url
         i['title'] = response.xpath('//p[@class="product-head-toptitle-first lh20"]/text()').extract()[0]

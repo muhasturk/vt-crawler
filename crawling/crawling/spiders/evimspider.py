@@ -3,7 +3,7 @@ __author__ = 'mh'
 
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
-from evim_net.items import EvimNetItem
+from crawling.items import CrawlingItem
 import re
 import scrapy
 
@@ -35,7 +35,7 @@ class EvimSpider(CrawlSpider):
     )
 
     def parse_item(self, response):
-        i = EvimNetItem()
+        i = CrawlingItem"()
         i['url'] = response.url
 
         try:
