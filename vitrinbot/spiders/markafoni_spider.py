@@ -10,13 +10,13 @@ class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
     allowed_domains = ['markafoni.com']
     start_urls = ['https://www.markafoni.com/']
-    # @todo dosya adı pipelineda kullanılacak
+    xml_filename = 'markafoni-%d.xml'
 
     rules = (
-        Rule(LinkExtractor(allow=('.com/(\w+)/$'))),
-        Rule(LinkExtractor(allow=('.com/([\w-]+)-(\d+)/'))),
-        Rule(LinkExtractor(allow=('/product/([\w-]+)-(\d+)/(\w+)/'))),
-        Rule(LinkExtractor(allow=('/product/(\d+)/$')), callback='parse_item'),
+        Rule(LinkExtractor(allow=('.com/(\w+)/$',))),
+        Rule(LinkExtractor(allow=('.com/([\w-]+)-(\d+)/',))),
+        Rule(LinkExtractor(allow=('/product/([\w-]+)-(\d+)/(\w+)/',))),
+        Rule(LinkExtractor(allow=('/product/(\d+)/$',)), callback='parse_item'),
     )
 
     def parse_item(self, response):
@@ -36,17 +36,17 @@ class MarkafonispiderSpider(CrawlSpider):
         priceNew = ''
         for price in response.xpath("//div[contains(@class,'buying_price')]/text()").extract():
             priceNew += price
-        i['priceNew'] = priceNew
+        i['special_price'] = priceNew
 
-        i['priceOld'] = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
+        i['price'] = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
 
-        i['images'] = response.xpath("//meta[@itemprop='image']/@content").extract()[0]
+        i['images'] = response.xpath("//meta[@itemprop='image']/@content").extract()
 
+        sizes = []
         if response.xpath("//div[@id='size_select']//label"):
             for label in response.xpath("//div[@id='size_select']//label/text()").extract():
-                i['sizes'] = label
-        else:
-            i['size'] = ''
+                sizes.append(label)
+        i['sizes'] = sizes
 
         return i
 

@@ -15,16 +15,9 @@ class KozmopolispiderSpider(CrawlSpider):
     xml_filename = 'kozmopoli-%d.xml'
 
     rules = (
-        Rule(
-            LinkExtractor(allow=('.com/marka/\d+/([\w-]+)$'))
-        ),
-        Rule(
-            LinkExtractor(allow=('.com/marka/\d+/[\w-]+\?page=\d+'))
-        ),
-        Rule(
-            LinkExtractor(allow=('.com/urun/[\w-]+(\?href=)?')),
-            callback='parse_item',
-        ),
+        Rule(LinkExtractor(allow=('.com/marka/\d+/([\w-]+)$',))),
+        Rule(LinkExtractor(allow=('.com/marka/\d+/[\w-]+\?page=\d+',))),
+        Rule(LinkExtractor(allow=('.com/urun/[\w-]+(\?href=)?',)), callback='parse_item',),
     )
 
     def parse_item(self, response):
@@ -33,16 +26,9 @@ class KozmopolispiderSpider(CrawlSpider):
 
         i['id'] = hxs.xpath('//div[@class="labeled pr-code"]/text()').extract()[0]
         i['url'] = response.url
-
         i['brand'] = hxs.xpath('//h2[@class="pageTitle"]/a/text()').extract()[0]
-
         i['title'] = hxs.xpath('//div[@class="pr-name"]/text()').extract()[0].strip()
-
-
-        category = ''
-        for sub in hxs.xpath('//div[@id="Breadcrumb"]//span/text()').extract():
-            category += sub + ">"
-        i['category'] = category
+        i['category'] = '>'.join(hxs.xpath('//div[@id="Breadcrumb"]//span/text()').extract())
 
         try:
             i['special_price'] = hxs.xpath('//span[@id="indirimli_satis_fiyati"]/text()').extract()[0]
@@ -58,14 +44,10 @@ class KozmopolispiderSpider(CrawlSpider):
             i['description'] = description
         except:
             i['description'] = ''
-
-
-        for img in hxs.xpath("//div[@class='zoom']//img/@src").extract():
-            i['images'] = img
-
-        i['colors'] = ''
+            
+        i['images'] = hxs.xpath("//div[@class='zoom']//img/@src").extract()
+        i['colors'] = []
         i['expire_timestamp'] = ''
         i['currency'] = 'TL'
-
 
         return i
