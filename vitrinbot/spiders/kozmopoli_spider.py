@@ -11,7 +11,7 @@ getCurrency =  utils.getCurrency
 
 
 class KozmopoliSpider(CrawlSpider):
-    name = 'kozmopolispider'
+    name = 'kozmopoli'
     allowed_domains = ['kozmopoli.com']
     start_urls = ['http://www.kozmopoli.com/']
 

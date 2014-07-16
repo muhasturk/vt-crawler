@@ -11,7 +11,7 @@ getCurrency = utils.getCurrency
 
 
 class MarkafoniSpider(CrawlSpider):
-    name = 'markafonispider'
+    name = 'markafoni'
     allowed_domains = ['markafoni.com']
     start_urls = ['https://www.markafoni.com/']
     xml_filename = 'markafoni-%d.xml'
@@ -47,20 +47,14 @@ class MarkafoniSpider(CrawlSpider):
         i['price'] =removeCurreny(priceText)
 
         try:
-            images = []
-            for img in response.xpath('//div[@id="thumbnails"]//img/@src').extract():
-                images.append(img)
-            i['images'] = images
+            i['images'] =  response.xpath('//div[@id="thumbnails"]//img/@src').extract()
         except:
             i['images'] = ''
             self.log("HATA! image lar cekilemedi. Url: %s" %response.url)
         # i['images'] = response.xpath("//meta[@itemprop='image']/@content").extract()
 
         try:
-            sizes = []
-            for label in response.xpath("//div[@id='size_select']//label/text()").extract():
-                sizes.append(label)
-            i['sizes'] = sizes
+            i['sizes'] = response.xpath("//div[@id='size_select']//label/text()").extract()
         except:
             i['sizes'] = ''
             self.log("sizes yok. Url: %s" %response.url)
