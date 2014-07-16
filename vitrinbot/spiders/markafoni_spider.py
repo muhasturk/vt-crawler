@@ -6,7 +6,9 @@ from vitrinbot.items import ProductItem
 from vitrinbot.base import utils
 import re
 
+removeCurreny =utils.removeCurrency
 getCurrency = utils.getCurrency
+
 
 class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
@@ -35,25 +37,31 @@ class MarkafonispiderSpider(CrawlSpider):
             description += li
         i['description'] = description
 
-        priceNew = ''
+        specialPriceText = ''
         for price in response.xpath("//div[contains(@class,'buying_price')]/text()").extract():
-            priceNew += price
-        i['special_price'] = priceNew
+            specialPriceText += price
+        i['special_price'] = removeCurreny(specialPriceText)
 
-        i['price'] = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
+
+        priceText = response.xpath("//del[contains(@class,'old_price')]/text()").extract()[0]
+        i['price'] =removeCurreny(priceText)
 
         i['images'] = response.xpath("//meta[@itemprop='image']/@content").extract()
 
-        sizes = []
-        if response.xpath("//div[@id='size_select']//label"):
+        try:
+            sizes = []
             for label in response.xpath("//div[@id='size_select']//label/text()").extract():
                 sizes.append(label)
-        i['sizes'] = sizes
+            i['sizes'] = sizes
+        except:
+            i['sizes'] = ''
+            self.log("sizes yok. Url: %s" %response.url)
+
 
         i['expire_timestamp']=i['colors'] = ''
 
         # i['currency'] = response.xpath('//div[@class="fl buying_price_tl green3"]/text()').extract()[0].strip()
-        i['currency'] = getCurrency(i['price'])
+        i['currency'] = getCurrency(priceText)
 
         return i
 
