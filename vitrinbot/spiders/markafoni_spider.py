@@ -3,8 +3,10 @@ import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from vitrinbot.items import ProductItem
+from vitrinbot.base import utils
 import re
 
+getCurrency = utils.getCurrency
 
 class MarkafonispiderSpider(CrawlSpider):
     name = 'markafonispider'
@@ -48,8 +50,12 @@ class MarkafonispiderSpider(CrawlSpider):
                 sizes.append(label)
         i['sizes'] = sizes
 
+        i['expire_timestamp']=i['colors'] = ''
+
+        # i['currency'] = response.xpath('//div[@class="fl buying_price_tl green3"]/text()').extract()[0].strip()
+        i['currency'] = getCurrency(i['price'])
+
         return i
 
-        # self.log("hatanin oldugu url: " + response.url + "\nhatanın mesajı: " + e.message)
 
 

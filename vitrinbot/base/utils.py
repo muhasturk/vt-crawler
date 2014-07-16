@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 from lxml import etree
-
+import  re
 
 class DictToXml(object):
 
@@ -31,3 +31,12 @@ class DictToXml(object):
 
     def dump(self):
         return etree.tostring(self.products, pretty_print=True, encoding='utf-8')
+
+def removeCurrency(string):
+    return string.replace('TL','').strip()
+
+def getCurrency(string):
+    return re.compile("[\d+,\d+]?\s*([a-zA-Z]+)").findall(string.strip())[0]
+
+
+

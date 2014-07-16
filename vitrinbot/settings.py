@@ -9,8 +9,8 @@ ITEM_PIPELINES = {
     'vitrinbot.pipelines.VitrinBotXMLPipelineExt': 300,
 }
 
-#LOG_FILE = "/tmp/vitrinbot.log"
+LOG_FILE = "/tmp/vitrinbot.log"
 
 XML_DUMP_DIR = '/tmp'
 
-MAX_PRODUCT_PER_XML = 10
+MAX_PRODUCT_PER_XML = 10000

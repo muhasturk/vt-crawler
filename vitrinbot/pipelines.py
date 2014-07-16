@@ -81,7 +81,7 @@ class VitrinBotXMLPipelineExt(object):
         self.create_xml(spider)
 
     def spider_closed(self, spider):
-        self.close_xml(spider)
+        self.close_xml()
 
     def process_item(self, item, spider):
         # @todo sayfalama için xmldeki ürün sayısı kontrol edilecek.
