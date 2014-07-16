@@ -6,10 +6,10 @@ SPIDER_MODULES = ['vitrinbot.spiders']
 NEWSPIDER_MODULE = 'vitrinbot.spiders'
 
 ITEM_PIPELINES = {
-    'vitrinbot.pipelines.VitrinBotXMLPipeline': 300,
+    'vitrinbot.pipelines.VitrinBotXMLPipelineExt': 300,
 }
 
-LOG_FILE = "/tmp/vitrinbot.log"
+#LOG_FILE = "/tmp/vitrinbot.log"
 
 XML_DUMP_DIR = '/tmp'
 
