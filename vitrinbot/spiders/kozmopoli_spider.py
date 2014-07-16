@@ -10,7 +10,7 @@ removeCurrency = utils.removeCurrency
 getCurrency =  utils.getCurrency
 
 
-class KozmopolispiderSpider(CrawlSpider):
+class KozmopoliSpider(CrawlSpider):
     name = 'kozmopolispider'
     allowed_domains = ['kozmopoli.com']
     start_urls = ['http://www.kozmopoli.com/']
@@ -37,25 +37,27 @@ class KozmopolispiderSpider(CrawlSpider):
             i['special_price'] = removeCurrency(hxs.xpath('//span[@id="indirimli_satis_fiyati"]/text()').extract()[0])
         except:
             i['special_price'] = ''
-            self.log("special price da sorun var. Url: %s" % response.url)
+            self.log("HATA! special price da sorun var. Url: %s" % response.url)
 
-        priceText = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
-        i['price'] = removeCurrency(priceText)
+        priceText = ''
+        try:
+            priceText = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
+            i['price'] = removeCurrency(priceText)
+        except:
+            self.log("HATA!: price cekilemedi. Url: %s" %response.url)
+
+        # priceText = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
+        # i['price'] = removeCurrency(priceText)
 
         i['description'] = "\n".join(hxs.xpath("//div[@class='productDescription']/p//span/text()").extract())
 
-        # try:
-        #     description = ''
-        #     for p in hxs.xpath("//div[@class='productDescription']/p//span/text()").extract():
-        #         description += p+"\n"
-        #     i['description'] = description
-        # except:
-        #     i['description'] = ''
-            
         i['images'] = hxs.xpath("//div[@class='zoom']//img/@src").extract()
 
         i['expire_timestamp']=i['sizes']=i['colors'] = ''
 
-        i['currency'] = getCurrency(priceText)
+        try:
+            i['currency'] = getCurrency(priceText)
+        except:
+            self.log("HATA! currency ayarlanamadi. Url: %s" %response.url)
 
         return i

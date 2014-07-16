@@ -38,18 +38,22 @@ class EvimSpider(CrawlSpider):
         i['url'] = response.url
         i['id'] = self.product_id
 
-        # try:
-        #     i['id'] = re.compile('_p(\d+)').findall(response.url)[0]
-        #
-        # except Exception as e:
-        #     self.log("hatalı ürün url:"+response.url)
+        try:
+            i['category'] = ' > '.join(response.xpath('//div[contains(@itemtype,"Breadcrumb")]//span/text()').extract())
+        except:
+            i['category'] = ''
+            self.log("HATA! kategori cekilemedi. Url: %s" % response.url)
+        # i['category'] = ' > '.join(response.xpath('//div[contains(@itemtype,"Breadcrumb")]//span/text()').extract())
 
-        i['category'] = ' > '.join(response.xpath('//div[contains(@itemtype,"Breadcrumb")]//span/text()').extract())
-        i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
+        try:
+            i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
+        except:
+            self.log("HATA! title secilemedi. Url: %s" %response.url)
+        # i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
 
         priceText = ''
         try:
-            if len(response.xpath('//div[@class="oldPrice fl"]/text()').extract()) == 0:
+            if not response.xpath('//div[@class="oldPrice fl"]/text()').extract():
                 priceText = response.xpath('//div[@class="price fl"]/text()').extract()[0]+\
                                             response.xpath('//div[@class="price fl"]//span/text()').extract()[0]
                 i['price'] = removeCurrency(priceText)
@@ -61,23 +65,37 @@ class EvimSpider(CrawlSpider):
                 i['special_price'] = removeCurrency(response.xpath('//div[@class="price fl"]/text()').extract()[0]+\
                                             response.xpath('//div[@class="price fl"]//span/text()').extract()[0])
         except:
-            self.log("Hatanin oldugu url: %s" %response.url)
+            self.log("HATA! fiyat(lar)? çekilemedi. Url: %s" %response.url)
 
-
-        if response.xpath('//span[@class="productBrand"]/a/text()'):
+        try:
             i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
-        else:
+        except:
             i['brand'] = ''
+            self.log("HATA! Marka yok. Url: %s" %response.url)
+        # if response.xpath('//span[@class="productBrand"]/a/text()'):
+        #     i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
+        # else:
+        #     i['brand'] = ''
 
-        if response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href'):
+        try:
             i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()[0]
-        else:
+        except:
             i['images'] = ''
+            self.log("HATA! resimler cekilemedi. Url: %s"%response.url)
 
-        description = ""
-        for decr in response.xpath('//div[@class="urunDetayOzelliktxt"]/text()').extract():
-            description += decr
-        i['description'] = description
+        # if response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href'):
+        #     i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()[0]
+        # else:
+        #     i['images'] = ''
+
+        try:
+            description = ""
+            for decr in response.xpath('//div[@class="urunDetayOzelliktxt"]/text()').extract():
+                description += decr
+            i['description'] = description
+        except:
+            i['description'] = ''
+            self.log("HATA! desciption cekilemedi. Url: %s" %response.url)
 
         i['expire_timestamp']=i['sizes']=i['colors'] = ''
 
