@@ -43,3 +43,5 @@ nosetests.xml
 
 stats
 .DS_STORE
+
+test.py

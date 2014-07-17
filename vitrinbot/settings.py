@@ -13,4 +13,4 @@ LOG_FILE = "/tmp/vitrinbot.log"
 
 XML_DUMP_DIR = '/tmp'
 
-MAX_PRODUCT_PER_XML = 100
+MAX_PRODUCT_PER_XML = 50
