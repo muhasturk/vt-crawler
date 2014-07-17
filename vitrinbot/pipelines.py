@@ -81,6 +81,8 @@ class VitrinBotXMLPipelineExt(object):
         self.create_xml(spider)
 
     def spider_closed(self, spider):
+        if self.product_count > 0:
+            self.write_product_data(self.product_xml.dump())
         self.close_xml()
 
     def process_item(self, item, spider):
