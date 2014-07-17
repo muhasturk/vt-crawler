@@ -11,7 +11,7 @@ getCurrency = utils.getCurrency
 
 
 class EvimSpider(CrawlSpider):
-    name = 'evimspider'
+    name = 'evim'
     allowed_domains = ['evim.net']
     start_urls = ['http://www.evim.net/']
     xml_filename = 'evim-%d.xml'

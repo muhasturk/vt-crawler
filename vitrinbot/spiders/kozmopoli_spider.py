@@ -14,8 +14,17 @@ class KozmopoliSpider(CrawlSpider):
     name = 'kozmopoli'
     allowed_domains = ['kozmopoli.com']
     start_urls = ['http://www.kozmopoli.com/']
-
     xml_filename = 'kozmopoli-%d.xml'
+
+    xpaths = {'id':'//div[@class="labeled pr-code"]/text()',
+              'brand':'//h2[@class="pageTitle"]/a/text()',
+              'title':'//div[@class="pr-name"]/text()',
+              'category':'//div[@id="Breadcrumb"]//span/text()',
+              'special_price':'//span[@id="indirimli_satis_fiyati"]/text()',
+              'price':'//div[@id="satis_fiyati"]/text()',
+              'description':'//div[@class="productDescription"]/p//span/text()',
+              'images':'//div[@class="zoom"]//img/@src'
+              }
 
     rules = (
         Rule(LinkExtractor(allow=('.com/marka/\d+/([\w-]+)$',))),
@@ -27,31 +36,31 @@ class KozmopoliSpider(CrawlSpider):
         i = ProductItem()
         hxs = Selector(response)
 
-        i['id'] = hxs.xpath('//div[@class="labeled pr-code"]/text()').extract()[0].replace('#','').strip()
+        i['id'] = hxs.xpath(self.xpaths['id']).extract()[0].replace('#','').strip()
         i['url'] = response.url
-        i['brand'] = hxs.xpath('//h2[@class="pageTitle"]/a/text()').extract()[0]
-        i['title'] = hxs.xpath('//div[@class="pr-name"]/text()').extract()[0].strip()
-        i['category'] = '>'.join(hxs.xpath('//div[@id="Breadcrumb"]//span/text()').extract())
+        i['brand'] = hxs.xpath(self.xpaths['brand']).extract()[0]
+        i['title'] = hxs.xpath(self.xpaths['title']).extract()[0].strip()
+        i['category'] = ' > '.join(hxs.xpath(self.xpaths['category']).extract())
 
         try:
-            i['special_price'] = removeCurrency(hxs.xpath('//span[@id="indirimli_satis_fiyati"]/text()').extract()[0])
+            i['special_price'] = removeCurrency(hxs.xpath(self.xpaths['special_price']).extract()[0])
         except:
             i['special_price'] = ''
             self.log("HATA! special price da sorun var. Url: %s" % response.url)
 
-        priceText = ''
         try:
-            priceText = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
+            priceText = hxs.xpath(self.xpaths['price']).extract()[0]
             i['price'] = removeCurrency(priceText)
         except:
+            i['price'] = priceText = ''
             self.log("HATA!: price cekilemedi. Url: %s" %response.url)
 
-        # priceText = hxs.xpath('//div[@id="satis_fiyati"]/text()').extract()[0]
-        # i['price'] = removeCurrency(priceText)
+        i['description'] = "\n".join(hxs.xpath(self.xpaths['description']).extract())
 
-        i['description'] = "\n".join(hxs.xpath("//div[@class='productDescription']/p//span/text()").extract())
-
-        i['images'] = hxs.xpath("//div[@class='zoom']//img/@src").extract()
+        images = []
+        for img in hxs.xpath(self.xpaths['images']).extract():
+            images.append("http://kozmopoli.com"+img)
+        i['images'] = images
 
         i['expire_timestamp']=i['sizes']=i['colors'] = ''
 
