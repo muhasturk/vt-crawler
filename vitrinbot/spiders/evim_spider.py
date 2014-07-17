@@ -17,6 +17,13 @@ class EvimSpider(CrawlSpider):
     xml_filename = 'evim-%d.xml'
     product_id = 1
 
+    xpaths = {'category':'//div[contains(@itemtype,"Breadcrumb")]//span/text()',
+              'title': '//h1[@class="productName"]/text()',
+              'brand':'//span[@class="productBrand"]/a/text()',
+              'images':'//div[@id="urunBuyukGorsel"]/div/a/@href',
+              'description':'//div[@class="urunDetayOzelliktxt"]/text()',
+              }
+
     rules = (
         Rule(
             LinkExtractor(allow=('.net/([\w-]+)$'))
@@ -39,17 +46,15 @@ class EvimSpider(CrawlSpider):
         i['id'] = self.product_id
 
         try:
-            i['category'] = ' > '.join(response.xpath('//div[contains(@itemtype,"Breadcrumb")]//span/text()').extract())
+            i['category'] = ' > '.join(response.xpath(self.xpaths['category']).extract())
         except:
             i['category'] = ''
             self.log("HATA! kategori cekilemedi. Url: %s" % response.url)
-        # i['category'] = ' > '.join(response.xpath('//div[contains(@itemtype,"Breadcrumb")]//span/text()').extract())
 
         try:
-            i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
+            i['title'] = response.xpath(self.xpaths['title']).extract()[0]
         except:
             self.log("HATA! title secilemedi. Url: %s" %response.url)
-        # i['title'] = response.xpath('//h1[@class="productName"]/text()').extract()[0]
 
         priceText = ''
         try:
@@ -68,31 +73,19 @@ class EvimSpider(CrawlSpider):
             self.log("HATA! fiyat(lar)? çekilemedi. Url: %s" %response.url)
 
         try:
-            i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
+            i['brand'] = response.xpath(self.xpaths['brand']).extract()[0]
         except:
             i['brand'] = ''
             self.log("HATA! Marka yok. Url: %s" %response.url)
-        # if response.xpath('//span[@class="productBrand"]/a/text()'):
-        #     i['brand'] = response.xpath('//span[@class="productBrand"]/a/text()').extract()[0]
-        # else:
-        #     i['brand'] = ''
 
         try:
-            i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()[0]
+            i['images'] = response.xpath(self.xpaths['images']).extract()
         except:
             i['images'] = ''
             self.log("HATA! resimler cekilemedi. Url: %s"%response.url)
 
-        # if response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href'):
-        #     i['images'] = response.xpath('//div[@id="urunBuyukGorsel"]/div/a/@href').extract()[0]
-        # else:
-        #     i['images'] = ''
-
         try:
-            description = ""
-            for decr in response.xpath('//div[@class="urunDetayOzelliktxt"]/text()').extract():
-                description += decr
-            i['description'] = description
+            i['description'] = "\n".join(response.xpath(self.xpaths['description']).extract())
         except:
             i['description'] = ''
             self.log("HATA! desciption cekilemedi. Url: %s" %response.url)
