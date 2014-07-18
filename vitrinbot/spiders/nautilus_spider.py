@@ -27,20 +27,62 @@ class NautilusSpider(CrawlSpider):
     }
 
     rules = (
-        Rule(
-            LinkExtractor(
-                allow=('catinfo\.asp\?offset=\d+.*')
-            )
-        ),
+        # Rule(
+        #     LinkExtractor(allow=('com/[\w\-]+'),
+        #                   deny=('\.asp$',
+        #                         '/login\.asp.*',
+        #                         '/sepet\.asp.*',
+        #                         '/hakkimizda\.asp.*',
+        #                         '/yardim.asp\.*',
+        #                         '/iletisim_formu\.asp.*',
+        #                         '\.com/catinfo\.asp(\?brw).*',# @fg
+
+                                # '/catinfo\.asp\?brw=.*',
+                                # '\/catinfo\.asp\?brw=.*',
+                                # '/catinfo\.asp\?brw=[\w&=\-]+',
+                                # '/catinfo\.asp\?brw=([\w&=\-])+',
+                                # '/catinfo\.asp(\?brw=[\w&=\-]+)',
+                                # '/catinfo\.asp\?brw=[\w&=]*',
+                                # '/catinfo\.asp\?brw=[\w\&=]*',
+                                # '/catinfo\.asp\?brw=(.*)',
+                                # '/catinfo\.asp\?brw=',
+                                # 'catinfo\.asp\?brw=',
+        #                   ),
+        #                   ),
+        #
+        # ),
+        # Rule(
+        #     LinkExtractor(allow=('com/[\w\-]+')   ),
+        #     callback='parse_item',
+        # )
+
+        # Rule(
+        #     LinkExtractor(
+        #         allow=('\.com/[\w-]+'),
+        #         deny=('catinfo\.asp\?brw=(.*)')
+        #     )
+        # ),
         Rule(
             LinkExtractor(allow=('com/[\w\-]+'),
                           deny=('\.asp$',
                                 '/login\.asp.*',
                                 '/sepet\.asp.*',
                                 '/hakkimizda\.asp.*',
-                                '/yardim.asp\.*',
+                                '/yardim\.asp\.*',
                                 '/iletisim_formu\.asp.*',
-                                '/catinfo\.asp(\?brw).*'# @todo gereksiz sayfalar
+
+                                '(.*)catinfo\.asp\?brw\=(.*)',
+                                'catinfo\.asp\?brw',
+                                # '\/catinfo\.asp\?brw=.*',
+                                # '/catinfo\.asp\?brw=[\w&=\-]+',
+                                # '/catinfo\.asp\?brw=([\w&=\-])+',
+                                # '/catinfo\.asp(\?brw=[\w&=\-]+)',
+                                # '/catinfo\.asp\?brw=[\w&=]*',
+                                # '/catinfo\.asp\?brw=[\w\&=]*',
+                                # '/catinfo\.asp\?brw=(.*)',
+                                # '/catinfo\.asp\?brw=',
+                                # 'catinfo\.asp\?brw=',
+                                # '(.*)\?brw\=(.*)'
                           ),
             ),
             callback='parse_item',
@@ -60,7 +102,7 @@ class NautilusSpider(CrawlSpider):
         i['url'] = response.url
         i['category'] = " > ".join(sl.xpath(self.xpaths['category']).extract())
         i['title'] = sl.xpath(self.xpaths['title']).extract()[0].strip()
-        i['special_price'] = i['price'] = sl.xpath(self.xpaths['price']).extract()[0].strip()
+        i['special_price'] = i['price'] = sl.xpath(self.xpaths['price']).extract()[0].strip().replace(',','.')
 
         images = []
         for img in sl.xpath(self.xpaths['images']).extract():
