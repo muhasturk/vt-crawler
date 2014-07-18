@@ -63,29 +63,16 @@ class NautilusSpider(CrawlSpider):
         #     )
         # ),
         Rule(
-            LinkExtractor(allow=('com/[\w\-]+'),
-                          deny=('\.asp$',
-                                '/login\.asp.*',
-                                '/sepet\.asp.*',
-                                '/hakkimizda\.asp.*',
-                                '/yardim\.asp\.*',
-                                '/iletisim_formu\.asp.*',
+            LinkExtractor(allow=('.com/(.*)',
+                                 'catinfo.asp\?offset'),
 
+                          deny=('.asp$',
                                 '(.*)catinfo\.asp\?brw\=(.*)',
                                 'catinfo\.asp\?brw',
-                                # '\/catinfo\.asp\?brw=.*',
-                                # '/catinfo\.asp\?brw=[\w&=\-]+',
-                                # '/catinfo\.asp\?brw=([\w&=\-])+',
-                                # '/catinfo\.asp(\?brw=[\w&=\-]+)',
-                                # '/catinfo\.asp\?brw=[\w&=]*',
-                                # '/catinfo\.asp\?brw=[\w\&=]*',
-                                # '/catinfo\.asp\?brw=(.*)',
-                                # '/catinfo\.asp\?brw=',
-                                # 'catinfo\.asp\?brw=',
-                                # '(.*)\?brw\=(.*)'
                           ),
             ),
-            callback='parse_item'
+            callback='parse_item',
+            follow=True
         ),
     )
 
