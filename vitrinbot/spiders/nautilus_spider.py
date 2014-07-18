@@ -85,8 +85,7 @@ class NautilusSpider(CrawlSpider):
                                 # '(.*)\?brw\=(.*)'
                           ),
             ),
-            callback='parse_item',
-            follow=True
+            callback='parse_item'
         ),
     )
 
@@ -100,7 +99,7 @@ class NautilusSpider(CrawlSpider):
 
         i['id'] = hashlib.md5(response.url.encode('utf-8')).hexdigest()
         i['url'] = response.url
-        i['category'] = " > ".join(sl.xpath(self.xpaths['category']).extract())
+        i['category'] = " > ".join(sl.xpath(self.xpaths['category']).extract()[1:-1])
         i['title'] = sl.xpath(self.xpaths['title']).extract()[0].strip()
         i['special_price'] = i['price'] = sl.xpath(self.xpaths['price']).extract()[0].strip().replace(',','.')
 
