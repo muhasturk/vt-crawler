@@ -26,25 +26,18 @@ class NautilusSpider(CrawlSpider):
     }
 
     rules = (
-
-        Rule(
-            LinkExtractor(allow=('com/[\w_]+',),
-
+        Rule( LinkExtractor(allow=('com/[\w_]+',),
                           deny=('asp$',
                                 'login\.asp'
                                 'hakkimizda\.asp',
                                 'musteri_hizmetleri\.asp',
                                 'iletisim_formu\.asp',
                                 'yardim\.asp',
-                                'sepet\.asp'
-                                'catinfo\.asp\?brw',
-                                'brw'
-                          ),
-            ),
-            callback='parse_item',
-            follow=True
+                                'sepet\.asp',
+                                'catinfo\.asp\?.*brw',
+                          ),),
+            callback='parse_item', follow=True
         ),
-
     )
 
 
