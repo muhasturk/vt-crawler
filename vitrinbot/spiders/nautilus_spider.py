@@ -15,7 +15,6 @@ class NautilusSpider(CrawlSpider):
     allowed_domains = ['nautilusconcept.com']
     start_urls = ['http://www.nautilusconcept.com/']
     xml_filename = 'nautilus-%d.xml'
-    product_id = 1
     xpaths = {
         'category' :'//tr[@class="KategoriYazdirTabloTr"]//a/text()',
         'title':'//h1[@class="UrunBilgisiUrunAdi"]/text()',
@@ -27,53 +26,25 @@ class NautilusSpider(CrawlSpider):
     }
 
     rules = (
-        # Rule(
-        #     LinkExtractor(allow=('com/[\w\-]+'),
-        #                   deny=('\.asp$',
-        #                         '/login\.asp.*',
-        #                         '/sepet\.asp.*',
-        #                         '/hakkimizda\.asp.*',
-        #                         '/yardim.asp\.*',
-        #                         '/iletisim_formu\.asp.*',
-        #                         '\.com/catinfo\.asp(\?brw).*',# @fg
 
-                                # '/catinfo\.asp\?brw=.*',
-                                # '\/catinfo\.asp\?brw=.*',
-                                # '/catinfo\.asp\?brw=[\w&=\-]+',
-                                # '/catinfo\.asp\?brw=([\w&=\-])+',
-                                # '/catinfo\.asp(\?brw=[\w&=\-]+)',
-                                # '/catinfo\.asp\?brw=[\w&=]*',
-                                # '/catinfo\.asp\?brw=[\w\&=]*',
-                                # '/catinfo\.asp\?brw=(.*)',
-                                # '/catinfo\.asp\?brw=',
-                                # 'catinfo\.asp\?brw=',
-        #                   ),
-        #                   ),
-        #
-        # ),
-        # Rule(
-        #     LinkExtractor(allow=('com/[\w\-]+')   ),
-        #     callback='parse_item',
-        # )
-
-        # Rule(
-        #     LinkExtractor(
-        #         allow=('\.com/[\w-]+'),
-        #         deny=('catinfo\.asp\?brw=(.*)')
-        #     )
-        # ),
         Rule(
-            LinkExtractor(allow=('.com/(.*)',
-                                 'catinfo.asp\?offset'),
+            LinkExtractor(allow=('com/[\w_]+',),
 
-                          deny=('.asp$',
-                                '(.*)catinfo\.asp\?brw\=(.*)',
+                          deny=('asp$',
+                                'login\.asp'
+                                'hakkimizda\.asp',
+                                'musteri_hizmetleri\.asp',
+                                'iletisim_formu\.asp',
+                                'yardim\.asp',
+                                'sepet\.asp'
                                 'catinfo\.asp\?brw',
+                                'brw'
                           ),
             ),
             callback='parse_item',
             follow=True
         ),
+
     )
 
 
@@ -103,5 +74,4 @@ class NautilusSpider(CrawlSpider):
 
         i['currency'] = sl.xpath(self.xpaths['currency']).extract()[0].strip()
 
-        self.product_id += 1
         return i
