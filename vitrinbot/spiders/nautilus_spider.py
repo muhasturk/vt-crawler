@@ -26,7 +26,7 @@ class NautilusSpider(CrawlSpider):
     }
 
     rules = (
-        Rule( LinkExtractor(allow=('com/[\w_]+',),
+        Rule( LinkExtractor(allow=('com/[\w-]+',),
                           deny=('asp$',
                                 'login\.asp'
                                 'hakkimizda\.asp',
