@@ -1,4 +1,10 @@
 # -*- coding: utf-8 -*-
+"""
+Yarım bırakıldı
+23-07-2014
+@author = muhasturk
+"""
+
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 

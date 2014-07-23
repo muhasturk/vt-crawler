@@ -33,10 +33,10 @@ class DictToXml(object):
         return etree.tostring(self.products, pretty_print=True, encoding='utf-8')
 
 def removeCurrency(string):
-    return string.replace('TL','').strip()
+    return string.replace(getCurrency(string),'').strip()
 
 def getCurrency(string):
-    return re.compile("[\d+,\d+]?\s*([a-zA-Z]+)").findall(string.strip())[0]
+    return re.compile("[\d,]*\s*([a-zA-Z]+)").findall(string.strip())[0]
 
 
 
