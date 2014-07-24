@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import scrapy
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 
@@ -13,17 +12,13 @@ getCurrency = utils.getCurrency
 replaceCommaWithDot = utils.replaceCommaWithDot
 
 
-
 class HappymilkSpider(CrawlSpider):
     name = 'happymilk'
-    allowed_domains = ['happymilk.com']
-    start_urls = ['http://www.happymilk.com/']
-
+    allowed_domains = ['happymilk.com.tr']
+    start_urls = ['http://www.happymilk.com.tr']
     xml_filename = 'happymilk-%d.xml'
 
-    xpaths = {
-
-    }
+    xpaths = {}
 
     rules = (
         Rule(LinkExtractor(allow=('asp/group/\d+/[a-zA-Z\-]+'))),
@@ -45,16 +40,17 @@ class HappymilkSpider(CrawlSpider):
         i['currency'] = 'TL'
 
         sizes = []
+        regexSize = re.compile("([a-zA-Z]+)\s*\(")
         for sz in sl.xpath('//option/text()').extract()[1:]:
-            sizes.append(re.compile("([a-zA-Z]+)\s*\(").findall(sz)[0])
-        i['sizes'] = sizes
+            sizes.append(regexSize.findall(sz)[0]) if regexSize.search(sz) else sizes.append(sz)
+        i['sizes'] = sizes if sizes else ''
 
         images = []
         for img in  sl.xpath('//img[@alt="imgBigPicture"]/@src').extract():
             images.append('http://www.happymilk.com.tr'+img)
         i['images'] = images
 
-        i['category'] = i['brand'] = ''
-        i['colors'] = i['expire_timestamp'] = ''
+        i['brand'] = 'Happy Milk'
+        i['category'] = i['colors'] = i['expire_timestamp'] = ''
 
         return i
