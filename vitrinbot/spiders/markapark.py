@@ -8,7 +8,7 @@ from vitrinbot.base import utils
 
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
-replaceComma = utils.replaceComma
+replaceCommaWithDot = utils.replaceCommaWithDot
 
 
 
@@ -45,21 +45,19 @@ class MarkaparkSpider(CrawlSpider):
         try:
             if sl.xpath('//p[@id="runBilgisiPiyasadaDiv"]'):
                 priceText = "".join(sl.xpath('//p[@id="runBilgisiPiyasadaDiv"]/text()').extract())
-                # i['price'] = removeCurrency(priceText)
-                i['price'] = replaceComma(removeCurrency(priceText))
+                i['price'] = replaceCommaWithDot(removeCurrency(priceText))
                 specialPriceText = "".join(sl.xpath('//p[@id="UrunBilgisiIndirimsizFiyatiDiv"]/text()').extract())
-                # i['special_price'] = removeCurrency(specialPriceText)
-                i['special_price'] = replaceComma(removeCurrency(specialPriceText))
+                i['special_price'] = replaceCommaWithDot(removeCurrency(specialPriceText))
             else:
                 priceText = "".join(sl.xpath('//p[@id="UrunBilgisiIndirimsizFiyatiDiv"]/text()').extract())
-                i['price'] = replaceComma(removeCurrency(priceText))
+                i['price'] = replaceCommaWithDot(removeCurrency(priceText))
                 i['special_price'] = ''
         except:
             priceText = ''
             self.log("HATA! Url: %s" %response.url)
 
         i['currency'] = getCurrency(priceText)
-        # i['sizes'] = sl.xpath('//label[@class="_1"]/text()').extract()
+
         sizes = []
         for size in sl.xpath('//label[@class="_1"]/text()').extract():
             if len(size) >= 3:
@@ -70,7 +68,7 @@ class MarkaparkSpider(CrawlSpider):
 
 
         if not sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]'):
-            i['images'] = "http://www.markapark.com/"+"".join(sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract())
+            i['images'] = ["http://www.markapark.com/"+"".join(sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract())]
         else:
             imgs = []
             for img in sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]//a/@href').extract():

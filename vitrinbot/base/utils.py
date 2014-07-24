@@ -38,7 +38,7 @@ def removeCurrency(string):
 def getCurrency(string):
     return re.compile("[\d,]*\s*([a-zA-Z]+)").findall(string.strip())[0]
 
-def replaceComma(string):
+def replaceCommaWithDot(string):
     return string.replace(',','.').strip()
 
 
