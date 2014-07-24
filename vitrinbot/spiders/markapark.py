@@ -59,7 +59,15 @@ class MarkaparkSpider(CrawlSpider):
             self.log("HATA! Url: %s" %response.url)
 
         i['currency'] = getCurrency(priceText)
-        i['sizes'] = sl.xpath('//label[@class="_1"]/text()').extract()
+        # i['sizes'] = sl.xpath('//label[@class="_1"]/text()').extract()
+        sizes = []
+        for size in sl.xpath('//label[@class="_1"]/text()').extract():
+            if len(size) >= 3:
+                sizes.append(size[:len(size)-1]+'.'+size[len(size)-1:])
+            else:
+                sizes.append(size)
+        i['sizes'] = sizes
+
 
         if not sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]'):
             i['images'] = "http://www.markapark.com/"+"".join(sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract())
