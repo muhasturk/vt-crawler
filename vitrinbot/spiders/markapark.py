@@ -62,9 +62,12 @@ class MarkaparkSpider(CrawlSpider):
         i['sizes'] = sl.xpath('//label[@class="_1"]/text()').extract()
 
         if not sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]'):
-            i['images'] = "".join(sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract())
+            i['images'] = "http://www.markapark.com/"+"".join(sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract())
         else:
-            i['images'] = sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]//a/@href').extract()
+            imgs = []
+            for img in sl.xpath('//td[@class="UrunBilgisiUrunResimSlaytTd"]//a/@href').extract():
+                imgs.append("http://www.markapark.com/"+img)
+            i['images'] = imgs
 
         i['description'] = i['expire_timestamp'] = i['colors'] = ''
 
