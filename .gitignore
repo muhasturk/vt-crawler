@@ -45,3 +45,4 @@ stats
 .DS_STORE
 
 test.py
+vitrinbot/settings.py
