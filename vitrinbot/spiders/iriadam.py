@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+"""
+description eksik
+"""
 from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 

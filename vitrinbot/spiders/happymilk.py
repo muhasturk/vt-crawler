@@ -6,6 +6,7 @@ from vitrinbot.items import ProductItem
 from scrapy.selector import Selector
 from vitrinbot.base import utils
 import re
+import urllib
 
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
@@ -28,6 +29,7 @@ class HappymilkSpider(CrawlSpider):
     def parse_item(self, response):
         i = ProductItem()
         sl = Selector(response=response)
+
         i['url'] = response.url
 
         i['id'] = ''.join(sl.xpath('//td[@class="urunKodu"]/text()').extract())
@@ -55,8 +57,10 @@ class HappymilkSpider(CrawlSpider):
 
         images = []
         for img in  sl.xpath('//img[@alt="imgBigPicture"]/@src').extract():
-            images.append('http://www.happymilk.com.tr'+img)
+            images.append(urllib.quote(('http://www.happymilk.com.tr'+img).encode('utf-8')))
         i['images'] = images
+
+
 
         i['brand'] = 'Happy Milk'
         i['category'] = i['expire_timestamp'] = ''
