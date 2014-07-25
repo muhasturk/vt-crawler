@@ -24,10 +24,10 @@ class IdiadamSpider(CrawlSpider):
     xpaths = {}
 
     rules = (
-        Rule(LinkExtractor(allow=('com/[\w-]+/[\w-]+'))),
-        Rule(LinkExtractor(allow=('com/[\w\-]+/[\w\-]+\?.*page=\d+'))),
-        Rule(LinkExtractor(allow=('com/[\w\-]+/[\w\-]+/[\w\-,]+\.html')), callback='parse_item',),
-        Rule(LinkExtractor(allow=('com/[\w-]+/[\w-]+\?.*product_id=\d+')),callback='parse_item')
+        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+'))),
+        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*page=\d+'))),
+        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\/[\w\-,]+')), callback='parse_item',),
+        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*product_id=\d+')),callback='parse_item')
     )
 
     def parse_item(self, response):
@@ -38,23 +38,23 @@ class IdiadamSpider(CrawlSpider):
         i['title'] = ''.join(sl.xpath('//h1/text()').extract())
         i['brand'] = ''.join(sl.xpath('//a[@itemprop="brand"]/text()').extract())
 
-        if sl.xpath('//div[@class="option"]'):
-            sizes = sl.xpath('//div[@class="option"]//option/text()').extract()
-            del sizes[0]
-            szs = []
-            for sz in  sizes:
-                szs.append(sz.strip())
-            i['sizes'] = szs
-        else:
-            i['sizes'] = ''
+        i['sizes'] = [x.strip() for x in sl.xpath('//div[@class="option"]//option/text()').extract()[1:]] if \
+            sl.xpath('//div[@class="option"]') else ''
 
         i['images'] = sl.xpath('//div[@class="MagicToolboxSelectorsContainer"]/a/@href').extract()
 
-        priceText = ''.join(sl.xpath('//p[@class="regular-price"]/text()').extract())
-        i['price'] = removeCurrency(priceText)
+        if not sl.xpath('//p[@class="regular-price"]'):
+            priceText = ''.join(sl.xpath('//span[@class="price-old"]/text()').extract())
+            i['price'] = removeCurrency(priceText)
+            i['special_price'] = removeCurrency(''.join(sl.xpath('//span[@class="price-new"]/text()').extract()))
+        else:
+            priceText = ''.join(sl.xpath('//p[@class="regular-price"]/text()').extract())
+            i['price'] = removeCurrency(priceText)
+            i['special_price'] = ''
+
         i['currency'] = getCurrency(priceText)
 
-        i['description'] = '' #eklenecek
+        i['description'] =''.join(sl.xpath('//div[@id="tab-product-tab1"]//*/text()').extract())
         i['special_price'] = i['expire_timestamp'] = ''
 
         return i
