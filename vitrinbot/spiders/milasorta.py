@@ -30,12 +30,14 @@ class MilasortaSpider(CrawlSpider):
         i['url'] = response.url
 
         i['id'] = ''.join(sl.xpath('//input[@id="urun_id"]/@value').extract())
-        i['title'] = sl.xpath('//h1[@class="UrunBilgisiUrunAdi"]/text()').extract()
+        i['title'] = ''.join(sl.xpath('//h1[@class="UrunBilgisiUrunAdi"]/text()').extract())
         
-        i['price'] = replaceCommaWithDot(''.join(sl.xpath('//*[@id="satir_1"]/text()').extract()))
-        i['special_price'] = replaceCommaWithDot(''.join(sl.xpath('//*[@id="tdUrunIndirimliFiyat"]/text()').extract()))
+        i['price'] = utils.replaceCommaWithDot(''.join(
+            sl.xpath('//span[@class="UrunBilgisiIndirimsizFiyatiDivBaslik"]/following-sibling::p/text()').extract()))
+        i['special_price'] = utils.replaceCommaWithDot(''.join(
+            sl.xpath('//p[@id="UrunBilgisiIndirimliFiyatiDiv"]/text()').extract()))
 
-        i['description'] = ''.join(sl.xpath('//td[@class="ss_spec_td2"]/*/text()').extract())
+        i['description'] = ''.join(sl.xpath('//td[@class="UrunBilgisiUrunBilgiIcerikTd"]').extract())
         i['currency'] = 'TL'
 
         sizes = []
