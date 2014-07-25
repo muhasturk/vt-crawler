@@ -24,22 +24,27 @@ class IdiadamSpider(CrawlSpider):
     xpaths = {}
 
     rules = (
-        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+'))),
-        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*page=\d+'))),
-        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\/[\w\-,]+')), callback='parse_item',),
-        Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*product_id=\d+')),callback='parse_item')
+        # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+'))),
+        # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*page=\d+'))),
+        # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\/[\w\-,]+')), callback='parse_item',),
+        # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*product_id=\d+',
+        # )),callback='parse_item')
+        Rule(LinkExtractor(allow=('com\/[\w\?\-]'),deny=('index\.php\?.*route')),callback='parse_item',follow=True),
     )
 
     def parse_item(self, response):
         i = ProductItem()
         sl = Selector(response=response)
+        if not sl.xpath('//div[@class="button_cart"]'):
+            return i
         i['url'] = response.url
         i['id'] = ''.join(re.compile('\d+').findall(''.join(sl.xpath('//div[@class="description"]/text()').extract())))
         i['title'] = ''.join(sl.xpath('//h1/text()').extract())
         i['brand'] = ''.join(sl.xpath('//a[@itemprop="brand"]/text()').extract())
 
-        i['sizes'] = [x.strip() for x in sl.xpath('//div[@class="option"]//option/text()').extract()[1:]] if \
-            sl.xpath('//div[@class="option"]') else ''
+        i['sizes'] = [''.join(re.compile('[\d.]+').findall(x)[0]) for x in sl.xpath('//div[@class="option"][1]'
+                                                                                    '//option/text()').extract()[1:]]\
+            if sl.xpath('//div[@class="option"]') else ''
 
         i['images'] = sl.xpath('//div[@class="MagicToolboxSelectorsContainer"]/a/@href').extract()
 
