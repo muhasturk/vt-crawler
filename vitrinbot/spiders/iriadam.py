@@ -46,7 +46,8 @@ class IdiadamSpider(CrawlSpider):
                                                                                     '//option/text()').extract()[1:]]\
             if sl.xpath('//div[@class="option"]') else ''
 
-        i['images'] = sl.xpath('//div[@class="MagicToolboxSelectorsContainer"]/a/@href').extract()
+        i['images'] = sl.xpath('//div[@class="MagicToolboxSelectorsContainer"]/a/@href').extract() if sl.xpath(
+            '//div[@class="MagicToolboxSelectorsContainer"]') else sl.xpath('//a[@class="MagicZoomPlus"]/@href').extract()
 
         if not sl.xpath('//p[@class="regular-price"]'):
             priceText = ''.join(sl.xpath('//span[@class="price-old"]/text()').extract())
