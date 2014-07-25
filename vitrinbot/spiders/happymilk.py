@@ -54,13 +54,16 @@ class HappymilkSpider(CrawlSpider):
             i['sizes'] = sizes if sizes else ''
             i['colors'] =  sl.xpath('//td[@class="sto_option2"]//option/text()').extract()[1:]
 
+        #
+        # images = []
+        # for img in  sl.xpath('//img[@alt="imgBigPicture"]/@src').extract():
+        #     images.append(urllib.quote(('http://www.happymilk.com.tr'+img).encode('utf-8')))
+        # i['images'] = images
 
         images = []
         for img in  sl.xpath('//img[@alt="imgBigPicture"]/@src').extract():
-            images.append(urllib.quote(('http://www.happymilk.com.tr'+img).encode('utf-8')))
+            images.append('http://www.happymilk.com.tr'+urllib.quote(img.encode('utf-8')))
         i['images'] = images
-
-
 
         i['brand'] = 'Happy Milk'
         i['category'] = i['expire_timestamp'] = ''
