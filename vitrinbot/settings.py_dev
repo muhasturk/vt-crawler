@@ -18,3 +18,28 @@ MAX_PRODUCT_PER_XML = 100
 # ROBOTSTXT_OBEY = True
 
 # REDIRECT_ENABLED = False
+
+
+HOOKS = {
+    "happymilk": {
+        "spider_closed": [
+            'echo "happymilk spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 135 false &',
+        ]
+    },
+
+    "takifoni": {
+        "spider_closed": [
+            'spider_finished',
+            'echo "takifoni spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 88 false &',
+        ]
+    },
+
+    "markalik": {
+        "spider_closed": [
+            'echo "markalik spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 92 false &',
+        ]
+    },
+}

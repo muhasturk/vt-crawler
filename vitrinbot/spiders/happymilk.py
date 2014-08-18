@@ -7,13 +7,14 @@ from scrapy.selector import Selector
 from vitrinbot.base import utils
 import re
 import urllib
+from vitrinbot.base.spiders import VitrinSpider
 
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 replaceCommaWithDot = utils.replaceCommaWithDot
 
 
-class HappymilkSpider(CrawlSpider):
+class HappymilkSpider(VitrinSpider):
     name = 'happymilk'
     allowed_domains = ['happymilk.com.tr']
     start_urls = ['http://www.happymilk.com.tr']
