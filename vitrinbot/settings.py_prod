@@ -29,18 +29,25 @@ HOOKS = {
         ]
     },
 
-    "takifoni": {
-        "spider_closed": [
-            'spider_finished',
-            'echo "takifoni spider finished. parse-provider-xml starting..."',
-            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 88 false &',
-        ]
-    },
+    #"takifoni": {
+    #    "spider_closed": [
+    #        'spider_finished',
+    #        'echo "takifoni spider finished. parse-provider-xml starting..."',
+    #        '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 88 false &',
+    #    ]
+    #},
 
     "markalik": {
         "spider_closed": [
             'echo "markalik spider finished. parse-provider-xml starting..."',
             '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 92 false &',
+        ]
+    },
+
+    "nautilus": {
+        "spider_closed": [
+            'echo "nautilus spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 139 false &',
         ]
     },
 }
