@@ -12,12 +12,13 @@ from vitrinbot.items import ProductItem
 from scrapy.selector import Selector
 from vitrinbot.base import utils
 
+from vitrinbot.base.spiders import VitrinSpider
 
 removeCurrency = utils.removeCurrency
 getCurrency =  utils.getCurrency
 
 
-class TakifoniSpider(CrawlSpider):
+class TakifoniSpider(VitrinSpider):
     name = 'takifoni'
     allowed_domains = ['takifoni.com']
     start_urls = ['http://www.takifoni.com/']

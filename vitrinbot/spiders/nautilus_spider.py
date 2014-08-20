@@ -6,11 +6,13 @@ from vitrinbot.items import ProductItem
 from vitrinbot.base import utils
 import hashlib
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 
 
-class NautilusSpider(CrawlSpider):
+class NautilusSpider(VitrinSpider):
     name = 'nautilus'
     allowed_domains = ['nautilusconcept.com']
     start_urls = ['http://www.nautilusconcept.com/']

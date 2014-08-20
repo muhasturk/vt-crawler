@@ -6,13 +6,15 @@ from vitrinbot.items import ProductItem
 from scrapy.selector import Selector
 from vitrinbot.base import utils
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 replaceCommaWithDot = utils.replaceCommaWithDot
 
 
 
-class MarkaparkSpider(CrawlSpider):
+class MarkaparkSpider(VitrinSpider):
     name = 'markapark'
     allowed_domains = ['markapark.com']
     start_urls = ['http://www.markapark.com/']

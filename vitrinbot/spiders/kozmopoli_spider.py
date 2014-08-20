@@ -6,11 +6,13 @@ from scrapy.selector import Selector
 from vitrinbot.items import ProductItem
 from vitrinbot.base import utils
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency =  utils.getCurrency
 
 
-class KozmopoliSpider(CrawlSpider):
+class KozmopoliSpider(VitrinSpider):
     name = 'kozmopoli'
     allowed_domains = ['kozmopoli.com']
     start_urls = ['http://www.kozmopoli.com/']

@@ -10,13 +10,14 @@ import re
 import requests
 from scrapy.http import TextResponse
 
+from vitrinbot.base.spiders import VitrinSpider
 
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 replaceCommaWithDot = utils.replaceCommaWithDot
 
 
-class MilasortaSpider(CrawlSpider):
+class MilasortaSpider(VitrinSpider):
     name = "milasorta"
     allowed_domains = ["www.milasorta.com"]
     start_urls = []

@@ -13,12 +13,14 @@ from scrapy.selector import Selector
 from vitrinbot.base import utils
 import re
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency =  utils.getCurrency
 
 
 
-class SportiveSpider(CrawlSpider):
+class SportiveSpider(VitrinSpider):
     name = 'sportive'
     allowed_domains = ['sportive.com']
     start_urls = ['http://www.sportive.com/']

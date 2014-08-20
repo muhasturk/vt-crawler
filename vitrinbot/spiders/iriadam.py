@@ -10,12 +10,14 @@ from scrapy.selector import Selector
 from vitrinbot.base import utils
 import re
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 replaceCommaWithDot = utils.replaceCommaWithDot
 
 
-class IdiadamSpider(CrawlSpider):
+class IdiadamSpider(VitrinSpider):
     name = 'iriadam'
     allowed_domains = ['iriadam.com']
     start_urls = ['http://www.iriadam.com/']

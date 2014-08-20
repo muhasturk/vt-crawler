@@ -6,11 +6,13 @@ from vitrinbot.items import ProductItem
 from vitrinbot.base import utils
 import re
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurreny =utils.removeCurrency
 getCurrency = utils.getCurrency
 
 
-class MarkafoniSpider(CrawlSpider):
+class MarkafoniSpider(VitrinSpider):
     name = 'markafoni'
     allowed_domains = ['markafoni.com']
     start_urls = ['https://www.markafoni.com/']

@@ -6,11 +6,13 @@ from scrapy.contrib.spiders import CrawlSpider, Rule
 from vitrinbot.items import ProductItem
 from vitrinbot.base import utils
 
+from vitrinbot.base.spiders import VitrinSpider
+
 removeCurrency = utils.removeCurrency
 getCurrency = utils.getCurrency
 
 
-class EvimSpider(CrawlSpider):
+class EvimSpider(VitrinSpider):
     name = 'evim'
     allowed_domains = ['evim.net']
     start_urls = ['http://www.evim.net/']
