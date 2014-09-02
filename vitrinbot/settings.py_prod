@@ -50,4 +50,11 @@ HOOKS = {
             '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 139 false &',
         ]
     },
+
+    "mizu": {
+        "spider_closed": [
+            'echo "mizu spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 16 false &',
+        ]
+    },
 }

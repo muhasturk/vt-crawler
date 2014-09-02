@@ -18,7 +18,8 @@ class MizuSpider(VitrinSpider):
     rules = (
         Rule(LinkExtractor(allow=('.com\/[a-z0-9\-]+', '.com\/[a-z0-9\-]+\?page=\d+', '.com\/(.*)\?v=\d+',),
                            deny=('/uyelik', '/yardim',)),
-             callback='parse_item'),
+             callback='parse_item',
+             follow=True),
     )
 
     def parse_item(self, response):
@@ -26,10 +27,11 @@ class MizuSpider(VitrinSpider):
         product = ProductItem()
         source = Selector(response)
 
-        if not source.xpath('//div[@id="productDetail"]'):
+        if not source.xpath('//div[@id="productDetail"]') or \
+                not source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]'):
             return product
 
-        product_id = source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]/b[@class="barcode"]/text()').extract()
+        product_id = source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]/b/text()').extract()
         title = source.xpath('//div[@id="productDetail"]//h1[@itemprop="name"]/text()').extract()
         description = source.xpath('//div[@id="productDetail"]//div[@class="desc-text"]//*/node()').extract()
         brand = source.xpath('//div[@id="productDetail"]//h2[@itemprop="brand"]/a/text()').extract()
@@ -43,8 +45,8 @@ class MizuSpider(VitrinSpider):
         currency = source.xpath('//div[@id="productDetail"]//div[@itemprop="offers"]/meta[@itemprop="priceCurrency"]/@content').extract()
         colors = source.xpath('//div[@id="productDetail"]//div[@class="variations"]/div[@class="var-group color"]/a/@title').extract()
         sizes = source.xpath('//div[@id="productDetail"]//div[@class="variations"]/div[@class="var-group"]/a/text()').extract()
-        
-        product['id'] = product_id[0]
+
+        product['id'] = 'MIZ_' + product_id[0] # Eski reklamaction xmlinde idler MIZ_ ile başlıyor.
         product['title'] = title[0]
         product['description'] = ' '.join(description)
         product['category'] = '>'.join(categories[1:])
@@ -53,8 +55,16 @@ class MizuSpider(VitrinSpider):
         product['sizes'] = sizes
         product['colors'] = colors
         product['images'] = images
-        product['special_price'] = price[0]
-        product['price'] = old_price[0]
+        product['special_price'] = self.get_price(price[0])
+        product['price'] = self.get_price(old_price[0])
         product['currency'] = currency[0]
 
+        self.log(product)
+
         return product
+
+    def get_price(self, price):
+        price = price.replace('.', '')
+        price = utils.removeCurrency(price)
+        price = price.replace(',', '.')
+        return price
