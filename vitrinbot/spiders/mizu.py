@@ -15,6 +15,8 @@ class MizuSpider(VitrinSpider):
     start_urls = ['http://www.mizu.com/']
     xml_filename = 'mizu-%d.xml'
 
+    utm_parameters = 'utm_source=vitringez&utm_medium=banner&utm_campaign=vitringez-product-%s'
+
     rules = (
         Rule(LinkExtractor(allow=('.com\/[a-z0-9\-]+', '.com\/[a-z0-9\-]+\?page=\d+', '.com\/(.*)\?v=\d+',),
                            deny=('/uyelik', '/yardim',)),
@@ -50,7 +52,7 @@ class MizuSpider(VitrinSpider):
         product['title'] = title[0]
         product['description'] = ' '.join(description)
         product['category'] = '>'.join(categories[1:])
-        product['url'] = response.url
+        product['url'] = self.get_url(response.url, product_id[0])
         product['brand'] = brand[0]
         product['sizes'] = sizes
         product['colors'] = colors
@@ -63,6 +65,10 @@ class MizuSpider(VitrinSpider):
 
         return product
 
+    def get_url(self, url, product_id):
+        q = '&' if url.find('?') else '?'
+        return url + q + self.utm_parameters % (product_id)
+        
     def get_price(self, price):
         price = price.replace('.', '')
         price = utils.removeCurrency(price)
