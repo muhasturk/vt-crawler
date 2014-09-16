@@ -5,6 +5,7 @@ from scrapy.contrib.spiders import CrawlSpider
 from scrapy.xlib.pydispatch import dispatcher
 from scrapy import signals
 from scrapy.utils.project import get_project_settings
+from vitrinbot.base import utils
 
 settings = get_project_settings()
 
@@ -25,6 +26,12 @@ class VitrinSpider(CrawlSpider):
         #self.white_list_for_description = settings["TAGS_WHITELIST"]
 
         #start_logging()
+
+    def get_price(self, price):
+        price = price.replace('.', '')
+        price = utils.removeCurrency(price)
+        price = price.replace(',', '.')
+        return price
 
     def spider_finished(self):
         pass

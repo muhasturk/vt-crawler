@@ -3,7 +3,6 @@ from scrapy.contrib.linkextractors import LinkExtractor
 from scrapy.contrib.spiders import CrawlSpider, Rule
 from scrapy.selector import Selector
 from vitrinbot.items import ProductItem
-from vitrinbot.base import utils
 import hashlib
 
 from vitrinbot.base.spiders import VitrinSpider
@@ -61,16 +60,8 @@ class MizuSpider(VitrinSpider):
         product['price'] = self.get_price(old_price[0])
         product['currency'] = currency[0]
 
-        self.log(product)
-
         return product
 
     def get_url(self, url, product_id):
         q = '&' if url.find('?') else '?'
         return url + q + self.utm_parameters % (product_id)
-        
-    def get_price(self, price):
-        price = price.replace('.', '')
-        price = utils.removeCurrency(price)
-        price = price.replace(',', '.')
-        return price
