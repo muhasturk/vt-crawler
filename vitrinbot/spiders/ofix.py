@@ -35,6 +35,11 @@ class OfixSpider(VitrinSpider):
         price = source.xpath('//div[@class="_price"]//td[@class="_priceTitle"]/following::td[2]/span/strong/text()').extract()
         discount = source.xpath('//div[@class="_price"]//div[@class="_discontPrice"]/text()').extract()
 
+        product_images = []
+        for image in images:
+            if image.find('http://') != 0:
+                product_images.append('http://www.ofix.com' + image)
+
         if price:
             price = float(self.get_price(price[0]))
         else:
@@ -54,7 +59,7 @@ class OfixSpider(VitrinSpider):
         #product['brand'] = brand[0]
         #product['sizes'] = sizes
         #product['colors'] = colors
-        product['images'] = images
+        product['images'] = product_images
         product['special_price'] = special_price
         product['price'] = price
         product['currency'] = 'TL'
