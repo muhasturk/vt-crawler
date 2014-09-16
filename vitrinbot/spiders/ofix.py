@@ -32,8 +32,8 @@ class OfixSpider(VitrinSpider):
         brand = source.xpath('//div[@id="productDetail"]//h2[@itemprop="brand"]/a/text()').extract()
         categories = source.xpath('//div[contains(@class, "header")]//div[@class="_content"]//a/text()').extract()
         images = source.xpath('//div[contains(@class, "contentBox")]//div[@class="productGallery"]//img/@src').extract()
-        price = source.xpath('//div[@class="_price"]//td[@class="_priceTitle"]/following::td[2]/span/strong/text()').extract()
-        discount = source.xpath('//div[@class="_price"]//div[@class="_discontPrice"]/text()').extract()
+        price = source.xpath('//div[@class="_price"]//td[contains(text(), "KDV")]/following::td[2]/span/strong/text()').extract()
+        special_price = source.xpath('//div[@class="_price"]//td[contains(text(), "dirimli")]/following::td[2]/span/text()').extract()
 
         product_images = []
         for image in images:
@@ -45,11 +45,10 @@ class OfixSpider(VitrinSpider):
         else:
             price = 0
 
-        if discount:
-            discount = float(self.get_price(discount[0]))
-            special_price = price - discount
+        if special_price:
+            special_price = float(self.get_price(special_price[0]))
         else:
-            special_price = price
+            special_price = 0
 
         product['id'] = product_id[0]
         product['title'] = title[0].strip()
