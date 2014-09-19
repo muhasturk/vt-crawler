@@ -63,5 +63,5 @@ class MizuSpider(VitrinSpider):
         return product
 
     def get_url(self, url, product_id):
-        q = '&' if url.find('?') else '?'
+        q = '&' if url.find('?') > 0 else '?'
         return url + q + self.utm_parameters % (product_id)
