@@ -34,6 +34,10 @@ class MarkaparkSpider(VitrinSpider):
     def parse_item(self, response):
         i = ProductItem()
         sl = Selector(response=response)
+
+        if not sl.xpath('//input[@id="satinal"]'):
+            return i
+
         i['url'] = response.url
         i['id'] = "".join(sl.xpath('//p[@class="UrunBilgisiUrunKodu"]/text()').extract()).strip()
         i['title'] = "".join(sl.xpath('//h1[@class="UrunBilgisiUrunAdi"]/text()').extract()).strip()

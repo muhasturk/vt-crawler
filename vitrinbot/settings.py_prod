@@ -14,7 +14,7 @@ LOG_FILE = "/tmp/vitrinbot.log"
 XML_DUMP_DIR = '/tmp'
 XML_DUMP_DIR = '/home/project/generic.vitringez.com/xml'
 
-MAX_PRODUCT_PER_XML = 25000
+MAX_PRODUCT_PER_XML = 2500
 
 ROBOTSTXT_OBEY = True
 
