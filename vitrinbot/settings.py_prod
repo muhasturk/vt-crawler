@@ -36,12 +36,12 @@ CONCURRENT_REQUESTS_PER_DOMAIN = 24
 
 
 HOOKS = {
-    "happymilk": {
-        "spider_closed": [
-            'echo "happymilk spider finished. parse-provider-xml starting..."',
-            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 146 false &',
-        ]
-    },
+    #"happymilk": {
+    #    "spider_closed": [
+    #        'echo "happymilk spider finished. parse-provider-xml starting..."',
+    #        '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 146 false &',
+    #    ]
+    #},
 
     #"takifoni": {
     #    "spider_closed": [
@@ -50,6 +50,13 @@ HOOKS = {
     #        '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 88 false &',
     #    ]
     #},
+
+    "markapark": {
+        "spider_closed": [
+            'echo "markapark spider finished. parse-provider-xml starting..."',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 145 false &',
+        ]
+    },
 
     "markalik": {
         "spider_closed": [
