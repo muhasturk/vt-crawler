@@ -38,7 +38,8 @@ class OfixSpider(VitrinSpider):
         product_images = []
         for image in images:
             if image.find('http://') != 0:
-                product_images.append('http://www.ofix.com' + image)
+                image = 'http://www.ofix.com' + image
+            product_images.append(image)
 
         if price:
             price = float(self.get_price(price[0]))
