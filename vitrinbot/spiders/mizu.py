@@ -29,7 +29,8 @@ class MizuSpider(VitrinSpider):
         source = Selector(response)
 
         if not source.xpath('//div[@id="productDetail"]') or \
-                not source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]'):
+                not source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]') or \
+                not source.xpath('//div[@id="productDetail"]//div[@itemprop="offers"]/span[@itemprop="price"]/text()'):
             return product
 
         product_id = source.xpath('//div[@id="productDetail"]//div[@class="product-barcode"]/b/text()').extract()
