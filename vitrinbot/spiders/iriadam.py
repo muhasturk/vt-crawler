@@ -31,7 +31,8 @@ class IdiadamSpider(VitrinSpider):
         # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\/[\w\-,]+')), callback='parse_item',),
         # Rule(LinkExtractor(allow=('com\/[\w\-]+\/[\w\-]+\?.*product_id=\d+',
         # )),callback='parse_item')
-        Rule(LinkExtractor(allow=('com\/[\w\?\-]'),deny=('index\.php\?.*route')),callback='parse_item',follow=True),
+        Rule(LinkExtractor(allow=('com\/[\w\?\-]',),
+                           deny=('index\.php\?.*route',)), callback='parse_item', follow=True),
     )
 
     def parse_item(self, response):
