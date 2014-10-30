@@ -18,7 +18,7 @@ MAX_PRODUCT_PER_XML = 2500
 
 ROBOTSTXT_OBEY = True
 
-REDIRECT_ENABLED = False
+#REDIRECT_ENABLED = False
 
 # Maximum number of concurrent items (per response) to process in parallel in the Item Processor (also known as the Item Pipeline).
 # Default: 100
