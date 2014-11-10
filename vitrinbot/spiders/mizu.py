@@ -18,7 +18,7 @@ class MizuSpider(VitrinSpider):
 
     rules = (
         Rule(LinkExtractor(allow=('.com\/[a-z0-9\-]+', '.com\/[a-z0-9\-]+\?page=\d+', '.com\/(.*)\?v=\d+',),
-                           deny=('/uyelik', '/yardim',)),
+                           deny=('/uyelik', '/yardim', '\?dynamic',)),
              callback='parse_item',
              follow=True),
     )
