@@ -18,7 +18,7 @@ class OfixSpider(VitrinSpider):
     xml_filename = 'ofix-%d.xml'
 
     rules = (
-        Rule(LinkExtractor(allow=('/Firsatlar', '/Kategori')), follow=True),
+        Rule(LinkExtractor(allow=('/Firsatlar', '/Kategori'), deny=('[\?|\&]type=[0-9]',)), follow=True),
         Rule(LinkExtractor(allow=('/Urunler')), callback="parse_item")
     )
 
@@ -26,7 +26,10 @@ class OfixSpider(VitrinSpider):
         product = ProductItem()
         source = Selector(response)
 
-        product_id = source.xpath('//div[@class="ProductAddToList"]/@product').extract()
+        product_id = source.xpath('//div[contains(@class, "productDetail")]//div[@class="ProductAddToList"]/@product').extract()
+        if not product_id:
+            return product
+
         title = source.xpath('//div[contains(@class, "productDetail")]//h1[@class="_title"]/text()').extract()
         description = source.xpath('//div[@class="productInfo"]/div/text()').extract()
         brand = source.xpath('//div[@id="productDetail"]//h2[@itemprop="brand"]/a/text()').extract()
