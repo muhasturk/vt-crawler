@@ -110,7 +110,7 @@ HOOKS = {
     "sportakil": {
         "spider_closed": [
             'echo "sportakil spider finished. parse-provider-xml starting..."',
-            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 164 false &',
+            '/usr/local/php5/bin/php /home/project/vitringez.com/app/console service:parse-provider-xml 165 false &',
         ]
     },
 }
