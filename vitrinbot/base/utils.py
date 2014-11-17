@@ -46,3 +46,5 @@ def replaceCommaWithDot(string):
     return string.replace(',','.').strip()
 
 
+def make_unique(list_data):
+    return list(set(list_data))
